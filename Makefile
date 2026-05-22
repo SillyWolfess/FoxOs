@@ -1,0 +1,19 @@
+objects = boot.o kernel.o port.o terminal.o globalDescriptorTable.o
+
+%.o: %.cpp
+	i686-elf-g++ -m32 -ffreestanding -O2 -Wall -Wextra -fno-exceptions -fno-rtti -c -o $@ $<
+
+%.o: %.s
+	i686-elf-as -o --32 $@ $<
+
+FoxOs: linker.ld ${objects}
+	i686-elf-gcc -T $< -o $@ ${objects} -ffreestanding -O2 -nostdlib -lgcc
+
+build_iso:
+	cp FoxOs isodir/boot/FoxOs 
+	cp grub.cfg isodir/boot/grub/grub.cfg
+	grub-mkrescue -o FoxOs.iso isodir
+
+copy_iso:
+	cp FoxOs.iso /media/sf_FoxOs/FoxOs.iso
+

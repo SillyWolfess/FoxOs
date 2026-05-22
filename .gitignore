@@ -1,0 +1,4 @@
+FoxOs.iso
+*.o
+/isodir/boot/FoxOs
+FoxOs
