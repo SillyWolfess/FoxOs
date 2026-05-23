@@ -24,12 +24,14 @@ extern "C"  void kernel_main(void)
 
 	terminal.writestring("creating interrupts\n");
 	InterruptManager interrupts(&gdt, &terminal);
+	interrupts.set();
 
 	/* Newline support is left as an exercise. */
 	terminal.writestring("Meow from the class\n");
 	terminal.writestring("Some other text\n");
 
-//	interrupts.activate();
+	interrupts.activate();
+	terminal.writestring("Interrupts activated");
 
 	while(1);
 }

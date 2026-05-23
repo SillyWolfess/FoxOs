@@ -1,9 +1,11 @@
 #include "InterruptManager.h"
 #include "terminal.h"
 
-InterruptManager::GateDescriptor InterruptManager::interruptDescriptorTable[256];
+InterruptManager::GateDescriptor InterruptManager::idt[256];
+Terminal*  InterruptManager::terminal;
 
 uint32_t InterruptManager::handle(uint8_t number, uint32_t esp) {
+    terminal->writestring("INTERRUPT");
     return esp;
 }
 
@@ -17,11 +19,11 @@ void InterruptManager::SetIdtEntries(
 
     const uint8_t IDT_DESC_PRESENT = 0x80;
 
-    interruptDescriptorTable[number].handlerAddressLowBits = ((uint32_t) handler) & 0xFFFF;
-    interruptDescriptorTable[number].gdt_codeSegmentSelector = codeSegmentOffset;
-    interruptDescriptorTable[number].reserved = 0;
-    interruptDescriptorTable[number].access = IDT_DESC_PRESENT | descriptorType | ((accessRights&3) << 5);
-    interruptDescriptorTable[number].handlerAddressHightBits = (((uint32_t) handler) >> 16) & 0xFFFF;
+    idt[number].handlerAddressLowBits = (uint16_t)(((uint32_t)handler) & 0xFFFF);
+    idt[number].selector = codeSegmentOffset;
+    idt[number].reserved = 0;
+    idt[number].access = IDT_DESC_PRESENT | descriptorType | ((accessRights&3) << 5);
+    idt[number].handlerAddressHightBits = (uint16_t)((((uint32_t)handler) >> 16) & 0xFFFF);
 }
 
 InterruptManager::InterruptManager(GlobalDescriptorTable *gdt, Terminal *t)
@@ -31,6 +33,9 @@ InterruptManager::InterruptManager(GlobalDescriptorTable *gdt, Terminal *t)
  picSlaveData(0xA1)
 {
     terminal = t;
+};
+
+void InterruptManager::set() {
     uint16_t CodeSegment = 0x08;// gdt->CodeSegmentSelector();
     const uint8_t IDT_INTERRUPT_GATE = 0xE;
     for (uint16_t i = 0; i < 256; i++) {
@@ -55,15 +60,13 @@ InterruptManager::InterruptManager(GlobalDescriptorTable *gdt, Terminal *t)
     picMasterData.write(0x00);
     picSlaveData.write(0x00);
 
-    interruptDescriptorTablePointer idt;
-    idt.size = 256 * sizeof(GateDescriptor) - 1;
-    idt.base = (uint32_t) interruptDescriptorTable;
+    _idtp.size = (256 * sizeof(GateDescriptor)) - 1;
+    _idtp.base = (uint32_t) &idt;
 
-    asm volatile("lidt %0": : "m" (idt));
+    asm volatile("lidt %0": : "m" (_idtp): "memory");
 
     terminal->writestring("Interrupt manager set\n");
-
-};
+}
 
 void InterruptManager::activate() {
     asm("sti");

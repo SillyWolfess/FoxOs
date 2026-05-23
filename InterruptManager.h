@@ -6,23 +6,24 @@
 #include "gdt.h"
 
 class InterruptManager {
-    Terminal* terminal;
+    static Terminal* terminal;
 protected:
     struct GateDescriptor{
         uint16_t handlerAddressLowBits;
-        uint16_t gdt_codeSegmentSelector;
+        uint16_t selector;
         uint8_t reserved;
         uint8_t access;
         uint16_t handlerAddressHightBits;
     } __attribute__((packed));
 
-    static GateDescriptor interruptDescriptorTable[256];
-
-    struct interruptDescriptorTablePointer
+    struct Idtp
     {
         uint16_t size;
         uint32_t base;
     } __attribute__((packed));
+
+    static GateDescriptor idt[256];
+    Idtp _idtp;
 
     static void SetIdtEntries(uint8_t number, uint16_t codeSegmentOffset, void (*handler)(), uint8_t accessRights, uint8_t descriptorType);
 
@@ -37,6 +38,7 @@ public:
     ~InterruptManager();
 
     void activate();
+    void set();
 
     static uint32_t handle(uint8_t number, uint32_t esp);
 

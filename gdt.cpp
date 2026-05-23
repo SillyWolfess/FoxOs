@@ -10,13 +10,14 @@ GlobalDescriptorTable::GlobalDescriptorTable(Terminal* terminal)
 void GlobalDescriptorTable::set() {
     _terminal->writestring("Setting gdt\n");
     _entries[0] = setEntry(0, 0, 0, 0);
-    _entries[1] = setEntry(0, 64*1024*1024, 0x9A, 0xCF);
-    _entries[2] = setEntry(0, 64*1024*1024, 0x92, 0xCF);
+    _entries[1] = setEntry(0, 0xffffffff, 0x9A, 0xCF);
+    _entries[2] = setEntry(0, 0xffffffff, 0x92, 0xCF);
 
     _ptr.size = (3 * (sizeof (entry))) - 1;
     _ptr.offset = (uint32_t) _entries;
 
-    asm volatile("lgdt %0": : "m" (_ptr) : "memory");
+    // asm volatile("lgdt %0": : "m" (_ptr) : "memory");
+    asm volatile("lgdt %[_entries]": : [_entries] "m" (_ptr) );
     _terminal->writestring("Gdt loaded\n");
 }
 
