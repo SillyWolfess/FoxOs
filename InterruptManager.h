@@ -29,10 +29,10 @@ protected:
 
     static void SetIdtEntries(uint8_t number, uint16_t codeSegmentOffset, void (*handler)(), uint8_t accessRights, uint8_t descriptorType);
 
-    Port8BitSlow picMasterCommand;
-    Port8BitSlow picMasterData;
-    Port8BitSlow picSlaveCommand;
-    Port8BitSlow picSlaveData;
+    Port8Bit picMasterCommand;
+    Port8Bit picMasterData;
+    Port8Bit picSlaveCommand;
+    Port8Bit picSlaveData;
 
 public:
 

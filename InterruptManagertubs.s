@@ -44,6 +44,7 @@ int_bottom:
     popa
 
 _ZN16InterruptManager6ignoreEv:
+
     iret
 
 .data

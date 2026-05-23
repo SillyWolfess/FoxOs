@@ -34,6 +34,21 @@ void Terminal::initialize(void)
     writestring("Terminal was initialized\n");
 }
 
+Terminal* Terminal::s_terminal = 0;
+
+void Terminal::writeHex8(uint8_t n) {
+    char *foo = "0x00";
+    char *hex = "0123456789ABCDEF";
+    foo[0] = hex[(n >> 8) & 0x0f];
+    foo[2] = hex[(n >> 4) & 0x0f];
+    foo[3] = hex[n &0x0f];
+    writestring(foo);
+}
+
+void Terminal::writeHex16(uint16_t n) {
+    writeHex8(n);
+}
+
 void Terminal::setcolor(uint8_t color)
 {
     terminal_color = color;

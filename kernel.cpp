@@ -15,6 +15,7 @@
 extern "C"  void kernel_main(void)
 {
 	Terminal terminal;
+	Terminal::s_terminal = &terminal;
 	/* Initialize terminal interface */
 	terminal.initialize();
 

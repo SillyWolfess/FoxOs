@@ -1,13 +1,19 @@
 #include "port.h"
-
+#include "terminal.h"
 
 Port::Port(uint16_t number) { this->number = number; }
 Port::~Port() {};
 
 Port8Bit::Port8Bit(uint16_t number):Port(number) { }
 Port8Bit::~Port8Bit(){};
-void Port8Bit::write(uint8_t data) {
-    __asm__ volatile("outb %0, %1": :"a" (data), "Nd" (number));
+void Port8Bit::write(uint8_t _data) {
+/*
+    Terminal::s_terminal->writeHex8(_data);
+    Terminal::s_terminal->writestring(" -> ");
+    Terminal::s_terminal->writeHex16(number);
+    Terminal::s_terminal->writestring("\n");
+*/
+    __asm__ volatile("outb %b0, %w1": :"a" (_data), "Nd" (number) : "memory");
 }
 uint8_t Port8Bit::read() {
     uint8_t result;

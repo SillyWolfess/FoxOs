@@ -69,26 +69,30 @@ void InterruptManager::set() {
     SetIdtEntries(0x20, CodeSegment, &request0x00, 0, IDT_INTERRUPT_GATE);
     SetIdtEntries(0x21, CodeSegment, &request0x01, 0, IDT_INTERRUPT_GATE);
 
-    picMasterCommand.write(0x11);
-    picSlaveCommand.write(0x11);
-
-    picMasterData.write(0x20);
-    picSlaveData.write(0x28);
-
-    picMasterData.write(0x04);
-    picSlaveData.write(0x02);
-
-    picMasterData.write(0x01);
-    picSlaveData.write(0x01);
-
-    picMasterData.write(0x00);
-    picSlaveData.write(0x00);
-
     _idtp.size = (256 * (sizeof(GateDescriptor))) - 1;
     _idtp.base = (uint32_t) idt;
 
-//    asm volatile("lidt %0": : "m" (_idtp): "memory");
+    //    asm volatile("lidt %0": : "m" (_idtp): "memory");
     asm volatile("lidt %[idt]": : [idt] "m" (_idtp) );
+
+    // Restart both PICs
+    picMasterCommand.write(0x11);
+    picSlaveCommand.write(0x11);
+
+    picMasterData.write(0x20); // start at 32
+    picSlaveData.write(0x28); // start at 40
+
+    // cascading for PICs
+    picMasterData.write(0x04);
+    picSlaveData.write(0x02);
+
+    //8086 mode for PICs
+    picMasterData.write(0x01);
+    picSlaveData.write(0x01);
+
+    // activate IRQs
+    picMasterData.write(0x00);
+    picSlaveData.write(0x00);
 
     terminal->writestring("Interrupt manager set\n");
 }
