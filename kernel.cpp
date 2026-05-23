@@ -31,7 +31,7 @@ extern "C"  void kernel_main(void)
 	terminal.writestring("Some other text\n");
 
 	interrupts.activate();
-	terminal.writestring("Interrupts activated");
+	terminal.writestring("Interrupts activated\n");
 
 	while(1);
 }

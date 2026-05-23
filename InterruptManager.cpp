@@ -9,20 +9,27 @@ uint32_t InterruptManager::handle(uint8_t number, uint32_t esp) {
     if (activeManager != 0) {
        return activeManager->doHandle(number, esp);
     }
+    terminal->writestring("no active manager\n");
     return esp;
 }
 
 uint32_t InterruptManager::doHandle(uint8_t number, uint32_t esp) {
-
-    terminal->writestring("INTERRUPT\n");
+    char *foo = "INTERRUPT 0x00\n";
+    char *hex = "0123456789ABCDEF";
+    foo[12] = hex[(number >> 4) & 0x0f];
+    foo[13] = hex[number &0x0f];
+    terminal->writestring(foo);
 
     if (0x20 <= number && number < 0x30) {
+        terminal->writestring("sending 0x20 to master\n");
         picMasterCommand.write(0x20);
         if (0x28 <= number) {
+            terminal->writestring("sending 0x20 to slave\n");
             picSlaveCommand.write(0x20);
         }
     }
 
+    terminal->writestring("returning from doHandle\n");
     return esp;
 }
 
@@ -44,7 +51,7 @@ void InterruptManager::SetIdtEntries(
 }
 
 InterruptManager::InterruptManager(GlobalDescriptorTable *gdt, Terminal *t)
-: picMasterCommand(0x20),
+:picMasterCommand(0x20),
  picMasterData(0x21),
  picSlaveCommand(0xA0),
  picSlaveData(0xA1)
@@ -82,22 +89,22 @@ void InterruptManager::set() {
 
 //    asm volatile("lidt %0": : "m" (_idtp): "memory");
     asm volatile("lidt %[idt]": : [idt] "m" (_idtp) );
-    activeManager = this;
 
     terminal->writestring("Interrupt manager set\n");
 }
 
 void InterruptManager::activate() {
-    /*
     if (activeManager != 0) {
         activeManager->deactivate();
     }
-    */
+    terminal->writestring("Activating interrupt manager\n");
+    activeManager = this;
     asm("sti");
 }
 
 void InterruptManager::deactivate() {
     if (activeManager == this) {
+        terminal->writestring("Deactivating interrupt manager\n");
         activeManager = 0;
         asm("cli");
     }
