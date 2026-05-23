@@ -8,6 +8,8 @@
 class InterruptManager {
     static Terminal* terminal;
 protected:
+    static InterruptManager* activeManager;
+
     struct GateDescriptor{
         uint16_t handlerAddressLowBits;
         uint16_t selector;
@@ -38,9 +40,11 @@ public:
     ~InterruptManager();
 
     void activate();
+    void deactivate();
     void set();
 
     static uint32_t handle(uint8_t number, uint32_t esp);
+    uint32_t doHandle(uint8_t number, uint32_t esp);
 
     static void ignore();
     static void request0x01();

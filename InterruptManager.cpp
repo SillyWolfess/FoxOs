@@ -2,10 +2,27 @@
 #include "terminal.h"
 
 InterruptManager::GateDescriptor InterruptManager::idt[256];
+InterruptManager* InterruptManager::activeManager = 0;
 Terminal*  InterruptManager::terminal;
 
 uint32_t InterruptManager::handle(uint8_t number, uint32_t esp) {
-    terminal->writestring("INTERRUPT");
+    if (activeManager != 0) {
+       return activeManager->doHandle(number, esp);
+    }
+    return esp;
+}
+
+uint32_t InterruptManager::doHandle(uint8_t number, uint32_t esp) {
+
+    terminal->writestring("INTERRUPT\n");
+
+    if (0x20 <= number && number < 0x30) {
+        picMasterCommand.write(0x20);
+        if (0x28 <= number) {
+            picSlaveCommand.write(0x20);
+        }
+    }
+
     return esp;
 }
 
@@ -60,16 +77,30 @@ void InterruptManager::set() {
     picMasterData.write(0x00);
     picSlaveData.write(0x00);
 
-    _idtp.size = (256 * sizeof(GateDescriptor)) - 1;
-    _idtp.base = (uint32_t) &idt;
+    _idtp.size = (256 * (sizeof(GateDescriptor))) - 1;
+    _idtp.base = (uint32_t) idt;
 
-    asm volatile("lidt %0": : "m" (_idtp): "memory");
+//    asm volatile("lidt %0": : "m" (_idtp): "memory");
+    asm volatile("lidt %[idt]": : [idt] "m" (_idtp) );
+    activeManager = this;
 
     terminal->writestring("Interrupt manager set\n");
 }
 
 void InterruptManager::activate() {
+    /*
+    if (activeManager != 0) {
+        activeManager->deactivate();
+    }
+    */
     asm("sti");
+}
+
+void InterruptManager::deactivate() {
+    if (activeManager == this) {
+        activeManager = 0;
+        asm("cli");
+    }
 }
 
 InterruptManager::~InterruptManager() {
