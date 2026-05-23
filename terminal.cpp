@@ -30,6 +30,8 @@ void Terminal::initialize(void)
             terminal_buffer[index] = vga_entry(' ', terminal_color);
         }
     }
+
+    writestring("Terminal was initialized\n");
 }
 
 void Terminal::setcolor(uint8_t color)

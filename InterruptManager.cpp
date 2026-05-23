@@ -24,13 +24,14 @@ void InterruptManager::SetIdtEntries(
     interruptDescriptorTable[number].handlerAddressHightBits = (((uint32_t) handler) >> 16) & 0xFFFF;
 }
 
-InterruptManager::InterruptManager(GlobalDescriptorTable *gdt)
+InterruptManager::InterruptManager(GlobalDescriptorTable *gdt, Terminal *t)
 : picMasterCommand(0x20),
  picMasterData(0x21),
  picSlaveCommand(0xA0),
  picSlaveData(0xA1)
 {
-    uint16_t CodeSegment = gdt->CodeSegmentSelector();
+    terminal = t;
+    uint16_t CodeSegment = 0x08;// gdt->CodeSegmentSelector();
     const uint8_t IDT_INTERRUPT_GATE = 0xE;
     for (uint16_t i = 0; i < 256; i++) {
         SetIdtEntries(i, CodeSegment, &ignore, 0, IDT_INTERRUPT_GATE);
@@ -60,22 +61,14 @@ InterruptManager::InterruptManager(GlobalDescriptorTable *gdt)
 
     asm volatile("lidt %0": : "m" (idt));
 
+    terminal->writestring("Interrupt manager set\n");
+
 };
 
 void InterruptManager::activate() {
     asm("sti");
 }
-/*
-void InterruptManager::ignore() {
 
-};
-void InterruptManager::request0x01() {
-
-};
-void InterruptManager::request0x00() {
-
-};
-*/
 InterruptManager::~InterruptManager() {
 
 };

@@ -1,4 +1,4 @@
-objects = boot.o kernel.o port.o InterruptManagertubs.o InterruptManager.o terminal.o globalDescriptorTable.o
+objects = boot.o kernel.o port.o InterruptManagertubs.o InterruptManager.o terminal.o gdt.o
 
 %.o: %.cpp
 	i686-elf-g++ -m32 -ffreestanding -O2 -Wall -Wextra -fno-exceptions -fno-rtti -c -o $@ $<
@@ -16,6 +16,8 @@ build_iso:
 
 copy_iso:
 	cp FoxOs.iso /media/sf_FoxOs/FoxOs.iso
+
+deploy_iso: build_iso copy_iso
 
 all: FoxOs build_iso copy_iso
 

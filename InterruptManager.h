@@ -2,10 +2,11 @@
 #define _INTERRUPT_MANAGER_H
 #include "types.h"
 #include "port.h"
-#include "globalDescriptorTable.h"
+#include "terminal.h"
+#include "gdt.h"
 
 class InterruptManager {
-
+    Terminal* terminal;
 protected:
     struct GateDescriptor{
         uint16_t handlerAddressLowBits;
@@ -32,7 +33,7 @@ protected:
 
 public:
 
-    InterruptManager(GlobalDescriptorTable *gdt);
+    InterruptManager(GlobalDescriptorTable *gdt, Terminal *terminal);
     ~InterruptManager();
 
     void activate();
