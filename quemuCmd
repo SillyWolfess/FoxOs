@@ -1,1 +1,2 @@
 qemu-system-i386 -kernel FoxOs -no-reboot -no-shutdown -d int 
+qemu-system-i386 -kernel ../FoxOs.bin -no-reboot -no-shutdown

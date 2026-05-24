@@ -85,6 +85,7 @@ uint32_t KeyboardDriver::handle(uint32_t esp) {
         case KEY_W: handleKey(key,"w"); break;
         case KEY_Y: handleKey(key,"y"); break;
         case KEY_Z: handleKey(key,"z"); break;
+        case KEY_X: handleKey(key,"x"); break;
         default:
             log(key);
         break;
