@@ -6,6 +6,21 @@ InterruptManager::idtEntry InterruptManager::idt[256];
 InterruptManager::Idtp InterruptManager::_idtp;
 InterruptManager* InterruptManager::activeManager = 0;
 
+InterruptHandler::InterruptHandler(uint8_t number, InterruptManager* manager) {
+    this->_number = number;
+    this->_manager = manager;
+    manager->_handlers[number] = this;
+}
+InterruptHandler::~InterruptHandler() {
+    if (_manager->_handlers[_number] == this) {
+        _manager->_handlers[_number] = 0;
+    }
+};
+
+uint32_t InterruptHandler::handle(uint32_t esp) {
+    return esp;
+}
+
 uint32_t InterruptManager::handle(uint8_t number, uint32_t esp) {
     if (activeManager != 0) {
        return activeManager->doHandle(number, esp);
@@ -22,7 +37,9 @@ void InterruptManager::log(uint8_t number) {
 }
 
 uint32_t InterruptManager::doHandle(uint8_t number, uint32_t esp) {
-    if (number != _IDT_TIMER) {
+    if (_handlers[number] != 0) {
+        esp = _handlers[number]->handle(esp);
+    } else if (number != _IDT_TIMER) {
         log(number);
     }
     if (0x20 <= number && number < 0x30) {
@@ -85,6 +102,7 @@ void InterruptManager::setHandlers() {
     const uint16_t CodeSegment = 0x08;
     const uint8_t IDT_INTERRUPT_GATE = 0x8E;
     for (uint16_t i = 0; i < 256; i++) {
+        _handlers[i] = 0;
         SetIdtEntries(i, (uint32_t)ignore, CodeSegment, IDT_INTERRUPT_GATE);
     }
 

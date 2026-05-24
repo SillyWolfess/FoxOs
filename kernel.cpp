@@ -2,6 +2,8 @@
 #include "gdt.h"
 #include "idt.h"
 
+#include "keyboard.h"
+
 #if defined(__linux__)
 #error "You are not using a cross-compiler, you will most certainly run into trouble"
 #endif
@@ -22,12 +24,15 @@ extern "C"  void kernel_main(void)
 	gdt.set();
 
 	terminal.writestring("creating interrupts\n");
-	InterruptManager interrupts(&gdt);
-	interrupts.set();
+	InterruptManager idt(&gdt);
+	idt.set();
 	/*init other drivers*/
 
+	KeyboardDriver keyboard(&idt);
+	keyboard.set();
+
 	/*activate interrupts*/
-	interrupts.activate();
+	idt.activate();
 	terminal.writestring("Meow from the class\n");
 	terminal.writestring("Some other text\n");
 

@@ -6,14 +6,32 @@
 
 #define _IDT_TIMER 0x20
 
+class InterruptManager;
+
 class InterruptHandler {
 protected:
-    uint8_t number;
+    uint8_t _number;
+    InterruptManager* _manager;
+
+    /***
+     * Create handler for interrupts
+     * @param number uint8_t - number of interrupt
+     * @param manager InterruptManager* - ref to the interrupt manager
+     */
+    InterruptHandler(uint8_t number, InterruptManager* manager);
+    ~InterruptHandler();
+public:
+    /***
+     * handle function for interrupt
+     */
+    virtual uint32_t handle(uint32_t esp);
 };
 
 class InterruptManager {
+    friend class InterruptHandler;
 protected:
     static InterruptManager* activeManager;
+    InterruptHandler* _handlers[256];
 
     struct idtEntry{
         uint16_t baseLow;
