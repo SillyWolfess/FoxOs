@@ -4,6 +4,13 @@
 #include "port.h"
 #include "gdt.h"
 
+#define _IDT_TIMER 0x20
+
+class InterruptHandler {
+protected:
+    uint8_t number;
+};
+
 class InterruptManager {
 protected:
     static InterruptManager* activeManager;
@@ -26,6 +33,8 @@ protected:
     static Idtp _idtp;
 
     static void SetIdtEntries(uint8_t number, uint32_t base, uint16_t selector, uint8_t flags);
+
+    void log(uint8_t number);
 
     /**
      * 0x20 8BitPort

@@ -10,27 +10,28 @@ uint32_t InterruptManager::handle(uint8_t number, uint32_t esp) {
     if (activeManager != 0) {
        return activeManager->doHandle(number, esp);
     }
-    Terminal::s_terminal->writestring("no active manager\n");
     return esp;
 }
 
-uint32_t InterruptManager::doHandle(uint8_t number, uint32_t esp) {
+void InterruptManager::log(uint8_t number) {
     char *foo = "INTERRUPT 0x00\n";
     char *hex = "0123456789ABCDEF";
     foo[12] = hex[(number >> 4) & 0x0f];
     foo[13] = hex[number & 0x0f];
     Terminal::s_terminal->writestring(foo);
+}
 
+uint32_t InterruptManager::doHandle(uint8_t number, uint32_t esp) {
+    if (number != _IDT_TIMER) {
+        log(number);
+    }
     if (0x20 <= number && number < 0x30) {
-        Terminal::s_terminal->writestring("sending 0x20 to master\n");
         picMasterCommand.write(0x20);
         if (0x28 <= number) {
-            Terminal::s_terminal->writestring("sending 0x20 to slave\n");
             picSlaveCommand.write(0x20);
         }
     }
 
-    Terminal::s_terminal->writestring("returning from doHandle\n");
     return esp;
 }
 

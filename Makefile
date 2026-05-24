@@ -21,6 +21,12 @@ deploy_iso: build_iso copy_iso
 
 all: FoxOs build_iso copy_iso
 
+run_vm_debug:
+	qemu-system-i386 -kernel FoxOs -no-reboot -no-shutdown -d int
+
+run_vm:
+	qemu-system-i386 -kernel FoxOs -no-reboot -no-shutdown
+
 .PHONY: clean
 clean:
 	rm -f $(objects) FoxOs FoxOs.iso *.o
