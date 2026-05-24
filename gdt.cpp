@@ -3,7 +3,7 @@
 
 GlobalDescriptorTable::GlobalDescriptorTable()
 {
-    Terminal::s_terminal->writestring("terminal sent to gdt\n");
+    Terminal::s_terminal->writestring("gdt()\n");
 }
 
 GlobalDescriptorTable::entry GlobalDescriptorTable::setEntry(
