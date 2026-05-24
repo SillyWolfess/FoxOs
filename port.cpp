@@ -23,6 +23,10 @@ uint8_t Port8Bit::read() {
 Port8BitSlow::Port8BitSlow(uint16_t number):Port8Bit(number) { }
 Port8BitSlow::~Port8BitSlow(){};
 void Port8BitSlow::write(uint8_t data){
+    Terminal::s_terminal->writeHex8(data);
+    Terminal::s_terminal->writestring(" -> ");
+    Terminal::s_terminal->writeHex16(number);
+    Terminal::s_terminal->writestring("\n");
     __asm__ volatile("outb %0, %1\njmp 1f\n1: jmp 1f\n1:": :"a" (data), "Nd" (number));
 }
 

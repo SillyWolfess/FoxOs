@@ -15,9 +15,6 @@ uint32_t InterruptManager::handle(uint8_t number, uint32_t esp) {
 }
 
 uint32_t InterruptManager::doHandle(uint8_t number, uint32_t esp) {
-    Terminal::s_terminal->writestring("INTERRUPT\n");
-    return esp;
-    /*
     char *foo = "INTERRUPT 0x00\n";
     char *hex = "0123456789ABCDEF";
     foo[12] = hex[(number >> 4) & 0x0f];
@@ -35,7 +32,6 @@ uint32_t InterruptManager::doHandle(uint8_t number, uint32_t esp) {
 
     Terminal::s_terminal->writestring("returning from doHandle\n");
     return esp;
-    */
 }
 
 void InterruptManager::SetIdtEntries(
@@ -88,11 +84,11 @@ void InterruptManager::setHandlers() {
     const uint16_t CodeSegment = 0x08;
     const uint8_t IDT_INTERRUPT_GATE = 0x8E;
     for (uint16_t i = 0; i < 256; i++) {
-        SetIdtEntries(i, CodeSegment, (uint32_t)ignore, IDT_INTERRUPT_GATE);
+        SetIdtEntries(i, (uint32_t)ignore, CodeSegment, IDT_INTERRUPT_GATE);
     }
 
-    SetIdtEntries(0x20, CodeSegment, (uint32_t)request0x00, IDT_INTERRUPT_GATE);
-    SetIdtEntries(0x21, CodeSegment, (uint32_t)request0x01, IDT_INTERRUPT_GATE);
+    SetIdtEntries(0x20, (uint32_t)request0x00, CodeSegment, IDT_INTERRUPT_GATE);
+    SetIdtEntries(0x21, (uint32_t)request0x01, CodeSegment, IDT_INTERRUPT_GATE);
 }
 
 void InterruptManager::loadIdt() {
