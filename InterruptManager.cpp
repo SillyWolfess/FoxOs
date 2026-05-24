@@ -79,13 +79,13 @@ void InterruptManager::restartPICs() {
 }
 
 void InterruptManager::setHandlers() {
-    uint16_t CodeSegment = 0x08;// gdt->CodeSegmentSelector();
+    uint16_t CodeSegment = 0x0008;// gdt->CodeSegmentSelector();
     const uint8_t IDT_INTERRUPT_GATE = 0xE;
     for (uint16_t i = 0; i < 256; i++) {
         SetIdtEntries(i, CodeSegment, &ignore, 0, IDT_INTERRUPT_GATE);
     }
 
-    SetIdtEntries(0x20, CodeSegment, &request0x00, 0, IDT_INTERRUPT_GATE);
+//    SetIdtEntries(0x20, CodeSegment, &request0x00, 0, IDT_INTERRUPT_GATE);
     SetIdtEntries(0x21, CodeSegment, &request0x01, 0, IDT_INTERRUPT_GATE);
 }
 

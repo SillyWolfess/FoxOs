@@ -20,7 +20,7 @@ extern "C"  void kernel_main(void)
 	terminal.initialize();
 
 	terminal.writestring("creating gdt\n");
-	GlobalDescriptorTable gdt();
+	GlobalDescriptorTable gdt;
 	gdt.set();
 
 	terminal.writestring("creating interrupts\n");
@@ -33,7 +33,6 @@ extern "C"  void kernel_main(void)
 
 	interrupts.activate();
 	terminal.writestring("Interrupts activated\n");
-
 	while(1);
 }
 
