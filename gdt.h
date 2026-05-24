@@ -5,7 +5,14 @@
 #include <stddef.h>
 #include <stdint.h>
 
-class Terminal;
+#define READ_4BITS_8FORM 0xF0
+#define READ_8BITS 0xFF
+#define READ_16BITS 0xFFFF
+#define READ_8BITS_24FORM 0xFF0000
+#define READ_8BITS_32FORM 0xFF000000
+#define READ_1st_4BITS 0xF0;
+#define READ_2nd_4BITS 0x0F;
+#define _32BITS 0xFFFFFFFF
 class GlobalDescriptorTable {
 
 public:
@@ -25,11 +32,15 @@ public:
     entry _entries[3];
     ptr _ptr;
 
-    Terminal *_terminal;
-
+    /***
+     * @param base uint32_t - usually 0
+     * @param limit uint32_t
+     * @param acess uint8_t
+     * @param flags uint8_t
+     */
     entry setEntry(uint32_t base, uint32_t limit, uint8_t acess, uint8_t flags);
 public:
-    GlobalDescriptorTable(Terminal*);
+    GlobalDescriptorTable();
     ~GlobalDescriptorTable();
     void set();
 };

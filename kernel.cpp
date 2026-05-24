@@ -20,11 +20,11 @@ extern "C"  void kernel_main(void)
 	terminal.initialize();
 
 	terminal.writestring("creating gdt\n");
-	GlobalDescriptorTable gdt(&terminal);
+	GlobalDescriptorTable gdt();
 	gdt.set();
 
 	terminal.writestring("creating interrupts\n");
-	InterruptManager interrupts(&gdt, &terminal);
+	InterruptManager interrupts(&gdt);
 	interrupts.set();
 
 	/* Newline support is left as an exercise. */
