@@ -4,6 +4,8 @@
 
 #include "keyboard.h"
 #include "driverManager.h"
+#include "eventManager.h"
+#include "keyboardEventHandler.h"
 
 #if defined(__linux__)
 #error "You are not using a cross-compiler, you will most certainly run into trouble"
@@ -26,8 +28,14 @@ extern "C"  void kernel_main(void)
 	InterruptManager idt(&gdt);
 	idt.set();
 	/*init other drivers*/
+	EventManager eventManager;
+	eventManager.set();
+
+	KeyboardEventHandler keyboardEventHandler;
+	eventManager.add(&keyboardEventHandler);
+
 	DriverManager driverManager;
-	KeyboardDriver keyboard(&idt);
+	KeyboardDriver keyboard(&idt, &eventManager);
 
 	driverManager.set();
 	// register drivers

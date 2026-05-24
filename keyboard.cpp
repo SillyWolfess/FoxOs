@@ -1,13 +1,14 @@
 #include "keyboard.h"
 #include "terminal.h"
 #include "keyMacro.h"
+#include "keyEvent.h"
 
-KeyboardDriver::KeyboardDriver(InterruptManager *manager)
+KeyboardDriver::KeyboardDriver(InterruptManager *manager, EventManager *evManager)
 :InterruptHandler(0x21, manager),
 _dataPort(0x60),
 _commandPort(0x64)
 {
-
+    _evManager = evManager;
 }
 
 void KeyboardDriver::set() {
@@ -30,7 +31,9 @@ KeyboardDriver::~KeyboardDriver() {
 }
 
 void KeyboardDriver::handleKey(uint8_t key, const char* data) {
-    printKey(data);
+    //printKey(data);
+    KeyEvent event(key, KEY_EVENT::UP);
+    _evManager->event(event);
 }
 
 void KeyboardDriver::printKey(const char* data) {

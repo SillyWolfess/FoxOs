@@ -5,13 +5,15 @@
 #include "idt.h"
 #include "port.h"
 #include "driver.h"
+#include "eventManager.h"
 
 class KeyboardDriver: public InterruptHandler, public Driver {
     Port8Bit _dataPort;
     Port8Bit _commandPort;
+    EventManager* _evManager;
     void log(uint8_t);
 public:
-    KeyboardDriver(InterruptManager* manager);
+    KeyboardDriver(InterruptManager* manager, EventManager* evManager);
     ~KeyboardDriver();
     void set();
     void activate() { set(); }
