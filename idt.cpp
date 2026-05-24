@@ -1,7 +1,8 @@
-#include "InterruptManager.h"
+#include "idt.h"
 #include "terminal.h"
+#include "bitMacros.h"
 
-InterruptManager::GateDescriptor InterruptManager::idt[256];
+InterruptManager::idtEntry InterruptManager::idt[256];
 InterruptManager* InterruptManager::activeManager = 0;
 
 uint32_t InterruptManager::handle(uint8_t number, uint32_t esp) {
@@ -34,19 +35,19 @@ uint32_t InterruptManager::doHandle(uint8_t number, uint32_t esp) {
 
 void InterruptManager::SetIdtEntries(
     uint8_t number,
-    uint16_t codeSegmentOffset,
-    void (*handler)(),
-    uint8_t accessRights,
-    uint8_t descriptorType
+    uint32_t base,
+    uint16_t selector,
+    uint8_t flags
 ) {
 
     const uint8_t IDT_DESC_PRESENT = 0x80;
 
-    idt[number].handlerAddressLowBits = (uint16_t)(((uint32_t)handler) & 0xFFFF);
-    idt[number].selector = codeSegmentOffset;
+    idt[number].baseLow = base & READ_16BITS;
+    idt[number].baseHigh = (base >> 16) & READ_16BITS;
+    idt[number].selector = selector;
     idt[number].reserved = 0;
-    idt[number].access = IDT_DESC_PRESENT | descriptorType | ((accessRights&3) << 5);
-    idt[number].handlerAddressHightBits = (uint16_t)((((uint32_t)handler) >> 16) & 0xFFFF);
+    idt[number].flags = flags | 0x60;
+    
 }
 
 InterruptManager::InterruptManager(GlobalDescriptorTable *gdt)
@@ -79,18 +80,18 @@ void InterruptManager::restartPICs() {
 }
 
 void InterruptManager::setHandlers() {
-    uint16_t CodeSegment = 0x0008;// gdt->CodeSegmentSelector();
-    const uint8_t IDT_INTERRUPT_GATE = 0xE;
+    const uint16_t CodeSegment = 0x08;
+    const uint8_t IDT_INTERRUPT_GATE = 0x8E;
     for (uint16_t i = 0; i < 256; i++) {
-        SetIdtEntries(i, CodeSegment, &ignore, 0, IDT_INTERRUPT_GATE);
+        SetIdtEntries(i, CodeSegment, (uint32_t)ignore, IDT_INTERRUPT_GATE);
     }
 
-//    SetIdtEntries(0x20, CodeSegment, &request0x00, 0, IDT_INTERRUPT_GATE);
-    SetIdtEntries(0x21, CodeSegment, &request0x01, 0, IDT_INTERRUPT_GATE);
+    SetIdtEntries(0x20, CodeSegment, (uint32_t)request0x00, IDT_INTERRUPT_GATE);
+    SetIdtEntries(0x21, CodeSegment, (uint32_t)request0x01, IDT_INTERRUPT_GATE);
 }
 
 void InterruptManager::loadIdt() {
-    _idtp.size = (256 * (sizeof(GateDescriptor))) - 1;
+    _idtp.size = (256 * (sizeof(idtEntry))) - 1;
     _idtp.base = (uint32_t) idt;
 
     //    asm volatile("lidt %0": : "m" (_idtp): "memory");
@@ -99,8 +100,8 @@ void InterruptManager::loadIdt() {
 
 void InterruptManager::set() {
     setHandlers();
-    loadIdt();
     restartPICs();
+    loadIdt();
     Terminal::s_terminal->writestring("Interrupt manager set\n");
 }
 

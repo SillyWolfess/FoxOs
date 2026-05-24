@@ -1,6 +1,6 @@
 #include "terminal.h"
 #include "gdt.h"
-#include "InterruptManager.h"
+#include "idt.h"
 
 /* Check if the compiler thinks you are targeting the wrong operating system. */
 #if defined(__linux__)

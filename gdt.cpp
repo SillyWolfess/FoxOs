@@ -1,5 +1,6 @@
 #include "gdt.h"
 #include "terminal.h"
+#include "bitMacros.h"
 
 GlobalDescriptorTable::GlobalDescriptorTable()
 {

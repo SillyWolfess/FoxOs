@@ -42,6 +42,7 @@ int_bottom:
     popl %es
     popl %ds
     popa
+    iret
 
 _ZN16InterruptManager6ignoreEv:
 

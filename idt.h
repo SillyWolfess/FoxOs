@@ -8,12 +8,12 @@ class InterruptManager {
 protected:
     static InterruptManager* activeManager;
 
-    struct GateDescriptor{
-        uint16_t handlerAddressLowBits;
+    struct idtEntry{
+        uint16_t baseLow;
         uint16_t selector;
         uint8_t reserved;
-        uint8_t access;
-        uint16_t handlerAddressHightBits;
+        uint8_t flags;
+        uint16_t baseHigh;
     } __attribute__((packed));
 
     struct Idtp
@@ -22,10 +22,10 @@ protected:
         uint32_t base;
     } __attribute__((packed));
 
-    static GateDescriptor idt[256];
+    static idtEntry idt[256];
     Idtp _idtp;
 
-    static void SetIdtEntries(uint8_t number, uint16_t codeSegmentOffset, void (*handler)(), uint8_t accessRights, uint8_t descriptorType);
+    static void SetIdtEntries(uint8_t number, uint32_t base, uint16_t selector, uint8_t flags);
 
     /**
      * 0x20 8BitPort
