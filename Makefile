@@ -1,4 +1,4 @@
-objects = boot.o kernel.o port.o idtstub.o idt.o terminal.o gdt.o keyboard.o
+objects = boot.o kernel.o port.o idtstub.o idt.o terminal.o gdt.o keyboard.o driverManager.o driver.o event.o keyEvent.o
 
 %.o: %.cpp
 	i686-elf-g++ -m32 -ffreestanding -O2 -Wall -Wextra -fno-exceptions -fno-rtti -c -o $@ $<

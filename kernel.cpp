@@ -3,6 +3,7 @@
 #include "idt.h"
 
 #include "keyboard.h"
+#include "driverManager.h"
 
 #if defined(__linux__)
 #error "You are not using a cross-compiler, you will most certainly run into trouble"
@@ -19,17 +20,20 @@ extern "C"  void kernel_main(void)
 	Terminal::s_terminal = &terminal;
 	terminal.initialize();
 
-	terminal.writestring("creating gdt\n");
 	GlobalDescriptorTable gdt;
 	gdt.set();
 
-	terminal.writestring("creating interrupts\n");
 	InterruptManager idt(&gdt);
 	idt.set();
 	/*init other drivers*/
-
+	DriverManager driverManager;
 	KeyboardDriver keyboard(&idt);
-	keyboard.set();
+
+	driverManager.set();
+	// register drivers
+	driverManager.add(&keyboard);
+	// activate drivers
+	driverManager.activate();
 
 	/*activate interrupts*/
 	idt.activate();
