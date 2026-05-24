@@ -16,6 +16,7 @@ build_iso:
 
 copy_iso:
 	cp FoxOs.iso /media/sf_FoxOs/FoxOs.iso
+	cp FoxOs /media/sf_FoxOs/FoxOs.bin
 
 deploy_iso: build_iso copy_iso
 
