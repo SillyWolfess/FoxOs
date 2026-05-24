@@ -1,8 +1,10 @@
 #include "keyEvent.h"
 
-KeyEvent::KeyEvent(uint8_t code, KEY_EVENT action) {
+KeyEvent::KeyEvent(uint8_t code, KEY_EVENT action)
+{
     _code = code;
     _action = action;
+    _data = code;
 }
 
 bool KeyEvent::isUp() {

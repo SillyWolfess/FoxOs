@@ -3,10 +3,14 @@
 
 #include "types.h"
 #include "event.h"
+#include "terminal.h"
 
 class EventHandler {
     public:
-        virtual void handle(Event) { };
+        void handle(Event e) {
+            Terminal::s_terminal->writestring("Handling default event ");
+            Terminal::s_terminal->writeHex8(e.getData());
+        };
 };
 
 #endif

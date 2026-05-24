@@ -3,7 +3,7 @@
 #include "terminal.h"
 #include "keyMacro.h"
 
-const char* KeyboardEventHandler::getKeySring(uint8_t key) {
+const char* KeyboardEventHandler::getKeyString(uint8_t key) {
  switch (key) {
     case KEY_0: return "0";
     case KEY_1: return "1";
@@ -48,6 +48,6 @@ const char* KeyboardEventHandler::getKeySring(uint8_t key) {
 void KeyboardEventHandler::handle(KeyEvent event) {
     uint8_t key = event.getCode();
     if (event.isUp()) {
-        Terminal::s_terminal->writestring(getKeySring(key));
-    }   
+        Terminal::s_terminal->writestring(getKeyString(key));
+    }
 }

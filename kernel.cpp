@@ -32,7 +32,7 @@ extern "C"  void kernel_main(void)
 	eventManager.set();
 
 	KeyboardEventHandler keyboardEventHandler;
-	eventManager.add(&keyboardEventHandler);
+	eventManager.addKeyHandler(&keyboardEventHandler);
 
 	DriverManager driverManager;
 	KeyboardDriver keyboard(&idt, &eventManager);

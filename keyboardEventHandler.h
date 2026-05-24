@@ -7,7 +7,7 @@
 class KeyboardEventHandler : public EventHandler {
     public:
         void handle(KeyEvent);
-        const char* getKeySring(uint8_t);
+        const char* getKeyString(uint8_t);
 };
 
 #endif

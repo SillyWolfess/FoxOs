@@ -33,7 +33,7 @@ KeyboardDriver::~KeyboardDriver() {
 void KeyboardDriver::handleKey(uint8_t key, const char* data) {
     //printKey(data);
     KeyEvent event(key, KEY_EVENT::UP);
-    _evManager->event(event);
+    _evManager->keyEvent(event);
 }
 
 void KeyboardDriver::printKey(const char* data) {
