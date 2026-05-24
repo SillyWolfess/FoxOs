@@ -21,8 +21,8 @@ public:
         uint32_t offset;
     } __attribute__((packed));
 
-    entry _entries[3];
-    ptr _ptr;
+    static entry _entries[3];
+    static ptr _ptr;
 
     /***
      * @param base uint32_t - usually 0

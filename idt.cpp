@@ -3,6 +3,7 @@
 #include "bitMacros.h"
 
 InterruptManager::idtEntry InterruptManager::idt[256];
+InterruptManager::Idtp InterruptManager::_idtp;
 InterruptManager* InterruptManager::activeManager = 0;
 
 uint32_t InterruptManager::handle(uint8_t number, uint32_t esp) {
@@ -14,6 +15,9 @@ uint32_t InterruptManager::handle(uint8_t number, uint32_t esp) {
 }
 
 uint32_t InterruptManager::doHandle(uint8_t number, uint32_t esp) {
+    Terminal::s_terminal->writestring("INTERRUPT\n");
+    return esp;
+    /*
     char *foo = "INTERRUPT 0x00\n";
     char *hex = "0123456789ABCDEF";
     foo[12] = hex[(number >> 4) & 0x0f];
@@ -31,6 +35,7 @@ uint32_t InterruptManager::doHandle(uint8_t number, uint32_t esp) {
 
     Terminal::s_terminal->writestring("returning from doHandle\n");
     return esp;
+    */
 }
 
 void InterruptManager::SetIdtEntries(
@@ -95,13 +100,13 @@ void InterruptManager::loadIdt() {
     _idtp.base = (uint32_t) idt;
 
     //    asm volatile("lidt %0": : "m" (_idtp): "memory");
-    asm volatile("lidt %[idt]": : [idt] "m" (_idtp) );
+    asm volatile("lidt %0": : "m" (_idtp));
 }
 
 void InterruptManager::set() {
     setHandlers();
-    restartPICs();
     loadIdt();
+    restartPICs();
     Terminal::s_terminal->writestring("Interrupt manager set\n");
 }
 
@@ -112,6 +117,7 @@ void InterruptManager::activate() {
     Terminal::s_terminal->writestring("Activating interrupt manager\n");
     activeManager = this;
     asm("sti");
+    Terminal::s_terminal->writestring("Interrupt manager active\n");
 }
 
 void InterruptManager::deactivate() {
@@ -119,6 +125,7 @@ void InterruptManager::deactivate() {
         Terminal::s_terminal->writestring("Deactivating interrupt manager\n");
         activeManager = 0;
         asm("cli");
+        Terminal::s_terminal->writestring("Interrupt manager inactive\n");
     }
 }
 

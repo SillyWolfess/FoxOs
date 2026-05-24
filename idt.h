@@ -23,27 +23,27 @@ protected:
     } __attribute__((packed));
 
     static idtEntry idt[256];
-    Idtp _idtp;
+    static Idtp _idtp;
 
     static void SetIdtEntries(uint8_t number, uint32_t base, uint16_t selector, uint8_t flags);
 
     /**
      * 0x20 8BitPort
      */
-    Port8Bit picMasterCommand;
+    Port8BitSlow picMasterCommand;
     /**
      * 0x21 8BitPort
      */
-    Port8Bit picMasterData;
+    Port8BitSlow picMasterData;
 
     /**
      * 0xA0 8BitPort
      */
-    Port8Bit picSlaveCommand;
+    Port8BitSlow picSlaveCommand;
     /**
      * 0xA1 8BitPort
      */
-    Port8Bit picSlaveData;
+    Port8BitSlow picSlaveData;
 
     void setHandlers();
     void restartPICs();

@@ -7,7 +7,7 @@ objects = boot.o kernel.o port.o idtstub.o idt.o terminal.o gdt.o
 	i686-elf-as --32 -o $@ $<
 
 FoxOs: linker.ld ${objects}
-	i686-elf-gcc -ffreestanding -O2 -nostdlib -lgcc -T $< -o $@ ${objects}
+	i686-elf-gcc -ffreestanding -O2 -nostdlib -lgcc -fno-exceptions -fno-rtti -T $< -o $@ ${objects}
 
 build_iso:
 	cp FoxOs isodir/boot/FoxOs 

@@ -2,6 +2,9 @@
 #include "terminal.h"
 #include "bitMacros.h"
 
+GlobalDescriptorTable::entry GlobalDescriptorTable::_entries[3];
+GlobalDescriptorTable::ptr GlobalDescriptorTable::_ptr;
+
 GlobalDescriptorTable::GlobalDescriptorTable()
 {
     Terminal::s_terminal->writestring("gdt()\n");
