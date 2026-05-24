@@ -38,13 +38,16 @@ void KeyboardDriver::printKey(const char* data) {
 }
 
 void KeyboardDriver::log(uint8_t key) {
-    Terminal::s_terminal->writestring("KEYBOARD ");
     Terminal::s_terminal->writeHex8(key);
-    Terminal::s_terminal->writestring("\n");
 }
 
 uint32_t KeyboardDriver::handle(uint32_t esp) {
     uint8_t key = _dataPort.read();
+
+    // We now handle only release key events
+    if (key < 0x80) {
+        return esp;
+    }
 
     switch (key) {
         case KEY_0: handleKey(key,"0"); break;
