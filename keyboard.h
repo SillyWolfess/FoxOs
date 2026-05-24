@@ -13,6 +13,8 @@ public:
     KeyboardDriver(InterruptManager* manager);
     ~KeyboardDriver();
     void set();
+    void printKey(const char* data);
+    void handleKey(uint8_t key, const char* data);
     virtual uint32_t handle(uint32_t esp);
 };
 

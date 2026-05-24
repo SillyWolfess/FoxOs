@@ -1,5 +1,6 @@
 #include "keyboard.h"
 #include "terminal.h"
+#include "keyMacro.h"
 
 KeyboardDriver::KeyboardDriver(InterruptManager *manager)
 :InterruptHandler(0x21, manager),
@@ -28,6 +29,14 @@ KeyboardDriver::~KeyboardDriver() {
 
 }
 
+void KeyboardDriver::handleKey(uint8_t key, const char* data) {
+    printKey(data);
+}
+
+void KeyboardDriver::printKey(const char* data) {
+    Terminal::s_terminal->writestring(data);
+}
+
 void KeyboardDriver::log(uint8_t key) {
     Terminal::s_terminal->writestring("KEYBOARD ");
     Terminal::s_terminal->writeHex8(key);
@@ -36,6 +45,46 @@ void KeyboardDriver::log(uint8_t key) {
 
 uint32_t KeyboardDriver::handle(uint32_t esp) {
     uint8_t key = _dataPort.read();
-    log(key);
+
+    switch (key) {
+        case KEY_0: handleKey(key,"0"); break;
+        case KEY_1: handleKey(key,"1"); break;
+        case KEY_2: handleKey(key,"2"); break;
+        case KEY_3: handleKey(key,"3"); break;
+        case KEY_4: handleKey(key,"4"); break;
+        case KEY_5: handleKey(key,"5"); break;
+        case KEY_6: handleKey(key,"6"); break;
+        case KEY_7: handleKey(key,"7"); break;
+        case KEY_8: handleKey(key,"8"); break;
+        case KEY_9: handleKey(key,"9"); break;
+        case KEY_A: handleKey(key,"a"); break;
+        case KEY_B: handleKey(key,"b"); break;
+        case KEY_C: handleKey(key,"c"); break;
+        case KEY_D: handleKey(key,"d"); break;
+        case KEY_E: handleKey(key,"e"); break;
+        case KEY_F: handleKey(key,"f"); break;
+        case KEY_G: handleKey(key,"g"); break;
+        case KEY_H: handleKey(key,"h"); break;
+        case KEY_I: handleKey(key,"i"); break;
+        case KEY_J: handleKey(key,"j"); break;
+        case KEY_K: handleKey(key,"k"); break;
+        case KEY_L: handleKey(key,"l"); break;
+        case KEY_M: handleKey(key,"m"); break;
+        case KEY_N: handleKey(key,"n"); break;
+        case KEY_O: handleKey(key,"o"); break;
+        case KEY_P: handleKey(key,"p"); break;
+        case KEY_Q: handleKey(key,"q"); break;
+        case KEY_R: handleKey(key,"r"); break;
+        case KEY_S: handleKey(key,"s"); break;
+        case KEY_T: handleKey(key,"t"); break;
+        case KEY_U: handleKey(key,"u"); break;
+        case KEY_V: handleKey(key,"v"); break;
+        case KEY_W: handleKey(key,"w"); break;
+        case KEY_Y: handleKey(key,"y"); break;
+        case KEY_Z: handleKey(key,"z"); break;
+        default:
+            log(key);
+        break;
+    }
     return esp;
 }
