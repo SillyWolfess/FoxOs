@@ -23,4 +23,4 @@ all: FoxOs build_iso copy_iso
 
 .PHONY: clean
 clean:
-	rm -f $(objects) FoxOs FoxOs.iso
+	rm -f $(objects) FoxOs FoxOs.iso *.o
