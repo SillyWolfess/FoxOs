@@ -35,38 +35,39 @@ void Terminal::initialize(void)
 
     clear();
     writestring("1234567890\nqwertyuiop\nasdfghjkl\nzxcvbnm\n");
-    writestring("0x01 = "); writeHex8(0x01);
-    writestring(" 0x02 = "); writeHex8(0x02);
-    writestring(" 0x03 = "); writeHex8(0x03);
-    writestring(" 0x04 = "); writeHex8(0x04);
-    writestring(" 0x05 = "); writeHex8(0x05);
-    writestring(" 0x06 = "); writeHex8(0x06);
-    writestring(" 0x07 = "); writeHex8(0x07);
-    writestring(" 0x08 = "); writeHex8(0x08);
-    writestring(" 0x09 = "); writeHex8(0x09);
-    writestring(" 0x0A = "); writeHex8(0x0A);
-    writestring(" 0x0B = "); writeHex8(0x0B);
-    writestring(" 0x0C = "); writeHex8(0x0C);
-    writestring(" 0x0D = "); writeHex8(0x0D);
-    writestring(" 0x0E = "); writeHex8(0x0E);
-    writestring(" 0x0F = "); writeHex8(0x0F);
+
+    writeHex8(0x01); writestring(" ");
+    writeHex8(0x02); writestring(" ");
+    writeHex8(0x03); writestring(" ");
+    writeHex8(0x04); writestring(" ");
+    writeHex8(0x05); writestring(" ");
+    writeHex8(0x06); writestring(" ");
+    writeHex8(0x07); writestring(" ");
+    writeHex8(0x08); writestring(" ");
+    writeHex8(0x09); writestring(" ");
+    writeHex8(0x0A); writestring(" ");
+    writeHex8(0x0B); writestring(" ");
+    writeHex8(0x0C); writestring(" ");
+    writeHex8(0x0D); writestring(" ");
+    writeHex8(0x0E); writestring(" ");
+    writeHex8(0x0F); writestring(" ");
     writestring("\n");
 
-    writestring("0x01 = "); writeHex8(0x10);
-    writestring(" 0x02 = "); writeHex8(0x20);
-    writestring(" 0x03 = "); writeHex8(0x);
-    writestring(" 0x04 = "); writeHex8(0x04);
-    writestring(" 0x05 = "); writeHex8(0x05);
-    writestring(" 0x06 = "); writeHex8(0x06);
-    writestring(" 0x07 = "); writeHex8(0x07);
-    writestring(" 0x08 = "); writeHex8(0x08);
-    writestring(" 0x09 = "); writeHex8(0x09);
-    writestring(" 0x0A = "); writeHex8(0x0A);
-    writestring(" 0x0B = "); writeHex8(0x0B);
-    writestring(" 0x0C = "); writeHex8(0x0C);
-    writestring(" 0x0D = "); writeHex8(0x0D);
-    writestring(" 0x0E = "); writeHex8(0x0E);
-    writestring(" 0x0F = "); writeHex8(0x0F);
+    writeHex8(0x10); writestring(" ");
+    writeHex8(0x20); writestring(" ");
+    writeHex8(0x30); writestring(" ");
+    writeHex8(0x40); writestring(" ");
+    writeHex8(0x50); writestring(" ");
+    writeHex8(0x60); writestring(" ");
+    writeHex8(0x70); writestring(" ");
+    writeHex8(0x80); writestring(" ");
+    writeHex8(0x90); writestring(" ");
+    writeHex8(0xA0); writestring(" ");
+    writeHex8(0xB0); writestring(" ");
+    writeHex8(0xC0); writestring(" ");
+    writeHex8(0xD0); writestring(" ");
+    writeHex8(0xE0); writestring(" ");
+    writeHex8(0xF0); writestring(" ");
     writestring("\n");
 }
 
@@ -75,8 +76,8 @@ Terminal* Terminal::s_terminal = 0;
 void Terminal::writeHex8(uint8_t n) {
     char *foo = "0x00";
     char *hex = "0123456789ABCDEF";
-    foo[2] = hex[(n >> 4) & 0x0f];
-    foo[3] = hex[n & 0x0f];
+    foo[2] = hex[(n >> 4) & 0x0F];
+    foo[3] = hex[n & 0x0F];
     writestring(foo);
 }
 
@@ -102,18 +103,21 @@ void Terminal::putchar(char c)
         terminal_column = 0;
         if (terminal_row >= VGA_HEIGHT) {
             terminal_row = 0;
-            clear();
+        //    clear();
         }
         return;
     }
-    if (terminal_row >= VGA_HEIGHT) {
+    /*
+     *    if (terminal_row >= VGA_HEIGHT) {
         terminal_row = 0;
-        clear();
-    }
+     //   clear();
+    }*/
     putentryat(c, terminal_color, terminal_column, terminal_row);
     if (++terminal_column == VGA_WIDTH) {
         terminal_column = 0;
-        terminal_row++;
+        //terminal_row++;
+        if (++terminal_row == VGA_HEIGHT)
+            terminal_row = 0;
     }
 }
 
