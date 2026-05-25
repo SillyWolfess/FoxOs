@@ -1,4 +1,4 @@
-#include "terminal.h"
+#include <terminal.h>
 
 uint8_t Terminal::vga_entry_color(enum vga_color fg, enum vga_color bg)
 {

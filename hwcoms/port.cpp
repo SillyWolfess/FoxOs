@@ -1,5 +1,5 @@
-#include "port.h"
-#include "terminal.h"
+#include <hwcoms/port.h>
+#include <terminal.h>
 
 Port::Port(uint16_t number) { this->number = number; }
 Port::~Port() {};

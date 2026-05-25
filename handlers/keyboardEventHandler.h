@@ -1,8 +1,8 @@
 #ifndef _KEYBOARD_EVENT_HANDLER_H
 #define _KEYBOARD_EVENT_HANDLER_H
 
-#include "eventHandler.h"
-#include "keyEvent.h"
+#include <handlers/eventHandler.h>
+#include <events/keyEvent.h>
 
 class KeyboardEventHandler : public EventHandler {
     public:

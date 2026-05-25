@@ -6,8 +6,11 @@
 #include <stdint.h>
 
 class Terminal {
-public:
+private:
     /* Hardware text mode color constants. */
+    #define VGA_WIDTH   80
+    #define VGA_HEIGHT  25
+    #define VGA_MEMORY  0xB8000
     enum vga_color {
         VGA_COLOR_BLACK = 0,
         VGA_COLOR_BLUE = 1,
@@ -27,22 +30,21 @@ public:
         VGA_COLOR_WHITE = 15,
     };
 
-    uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg);
-    uint16_t vga_entry(unsigned char uc, uint8_t color);
-    size_t strlen(const char* str);
-
-    #define VGA_WIDTH   80
-    #define VGA_HEIGHT  25
-    #define VGA_MEMORY  0xB8000
-
     size_t terminal_row;
     size_t terminal_column;
     uint8_t terminal_color;
     uint16_t* terminal_buffer = (uint16_t*)VGA_MEMORY;
 
+    uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg);
+    uint16_t vga_entry(unsigned char uc, uint8_t color);
+    size_t strlen(const char* str);
+
+protected:
+    void putentryat(char c, uint8_t color, size_t x, size_t y);
+
+public:
     void initialize(void);
     void setcolor(uint8_t color);
-    void putentryat(char c, uint8_t color, size_t x, size_t y);
     void putchar(char c);
     void write(const char* data, size_t size);
     void writestring(const char* data);

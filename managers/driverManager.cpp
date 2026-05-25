@@ -1,6 +1,7 @@
-#include "driverManager.h"
+#include <managers/driverManager.h>
+#include <drivers/driver.h>
+#include <terminal.h>
 
-#include "terminal.h"
 DriverManager::DriverManager() {
 
 }

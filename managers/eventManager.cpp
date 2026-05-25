@@ -1,6 +1,7 @@
-#include "eventManager.h"
+#include <managers/eventManager.h>
 
-#include "terminal.h"
+#include <terminal.h>
+#include <handlers/keyboardEventHandler.h>
 EventManager::EventManager() {
 
 }

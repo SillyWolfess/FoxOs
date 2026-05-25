@@ -1,7 +1,6 @@
-#include "keyboardEventHandler.h"
-#include "keyEvent.h"
-#include "terminal.h"
-#include "keyMacro.h"
+#include <handlers/keyboardEventHandler.h>
+#include <terminal.h>
+#include <macros/keyMacro.h>
 
 const char* KeyboardEventHandler::getKeyString(uint8_t key) {
  switch (key) {

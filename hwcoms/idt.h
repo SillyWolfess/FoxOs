@@ -1,8 +1,8 @@
 #ifndef _INTERRUPT_MANAGER_H
 #define _INTERRUPT_MANAGER_H
-#include "types.h"
-#include "port.h"
-#include "gdt.h"
+#include <types.h>
+#include <hwcoms/port.h>
+#include <gdt.h>
 
 #define _IDT_TIMER 0x20
 

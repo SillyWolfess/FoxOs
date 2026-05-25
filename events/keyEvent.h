@@ -1,7 +1,7 @@
 #ifndef KEY_EVENT_H
 #define KEY_EVENT_H
 
-#include "event.h"
+#include <events/event.h>
 
 enum class KEY_EVENT {UP, DOWN};
 class KeyEvent: public Event {

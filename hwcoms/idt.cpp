@@ -1,6 +1,6 @@
-#include "idt.h"
-#include "terminal.h"
-#include "bitMacros.h"
+#include <hwcoms/idt.h>
+#include <terminal.h>
+#include <macros/bitMacros.h>
 
 InterruptManager::idtEntry InterruptManager::idt[256];
 InterruptManager::Idtp InterruptManager::_idtp;

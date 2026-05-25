@@ -1,4 +1,4 @@
-#include "keyEvent.h"
+#include <events/keyEvent.h>
 
 KeyEvent::KeyEvent(uint8_t code, KEY_EVENT action)
 {

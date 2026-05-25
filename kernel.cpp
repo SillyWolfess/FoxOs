@@ -1,11 +1,13 @@
-#include "terminal.h"
-#include "gdt.h"
-#include "idt.h"
-
-#include "keyboard.h"
-#include "driverManager.h"
-#include "eventManager.h"
-#include "keyboardEventHandler.h"
+#include <terminal.h>
+#include <gdt.h>
+#include <hwcoms/idt.h>
+// drivers
+#include <drivers/keyboard.h>
+// managers
+#include <managers/driverManager.h>
+#include <managers/eventManager.h>
+// handlers
+#include <handlers/keyboardEventHandler.h>
 
 #if defined(__linux__)
 #error "You are not using a cross-compiler, you will most certainly run into trouble"

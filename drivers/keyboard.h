@@ -1,11 +1,11 @@
 #ifndef _KEYBOARD_H
 #define _KEYBOARD_H
 
-#include "types.h"
-#include "idt.h"
-#include "port.h"
-#include "driver.h"
-#include "eventManager.h"
+#include <types.h>
+#include <idt.h>
+#include <port.h>
+#include <drivers/driver.h>
+class EventManager;
 
 class KeyboardDriver: public InterruptHandler, public Driver {
     Port8Bit _dataPort;

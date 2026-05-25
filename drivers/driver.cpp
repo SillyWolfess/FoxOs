@@ -1,5 +1,5 @@
-#include "driver.h"
-#include "terminal.h"
+#include <drivers/driver.h>
+#include <terminal.h>
 
 Driver::Driver() {
 

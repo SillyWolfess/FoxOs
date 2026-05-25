@@ -1,11 +1,10 @@
 #ifndef _EVENT_MANAGER_H
 #define _EVENT_MANAGER_H
 
-#include "types.h"
-#include "eventHandler.h"
-#include "keyboardEventHandler.h"
-#include "keyEvent.h"
+#include <events/event.h>
 
+class EventHandler;
+class KeyboardEventHandler;
 #define MAX_EVENT_HANDLERS 256
 class EventManager {
     EventHandler* _handlers[MAX_EVENT_HANDLERS];
