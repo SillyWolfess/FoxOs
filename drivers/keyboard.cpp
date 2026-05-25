@@ -14,6 +14,7 @@ _commandPort(0x64)
 }
 
 void KeyboardDriver::activate() {
+    Terminal::s_terminal->writestring("Keyboard...");
     // wait for ports to be empty
     while (_commandPort.read() & 0x1) {
         _dataPort.read();
@@ -25,7 +26,7 @@ void KeyboardDriver::activate() {
     _dataPort.write(status);
 
     _dataPort.write(0xF4);
-    Terminal::s_terminal->writestring("Keyboard set\n");
+    Terminal::s_terminal->writestring("OK\n");
 }
 
 KeyboardDriver::~KeyboardDriver() {

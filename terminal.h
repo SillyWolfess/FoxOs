@@ -50,6 +50,7 @@ public:
     void writestring(const char* data);
     void writeHex8(uint8_t);
     void writeHex16(uint16_t);
+    void clear();
 
     static Terminal* s_terminal;
 };

@@ -18,20 +18,22 @@ size_t Terminal::strlen(const char* str)
     return len;
 }
 
-void Terminal::initialize(void)
-{
-    terminal_row = 0;
-    terminal_column = 0;
-    terminal_color = vga_entry_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
-
+void Terminal::clear() {
     for (size_t y = 0; y < VGA_HEIGHT; y++) {
         for (size_t x = 0; x < VGA_WIDTH; x++) {
             const size_t index = y * VGA_WIDTH + x;
             terminal_buffer[index] = vga_entry(' ', terminal_color);
         }
     }
+}
 
-    writestring("Terminal was initialized\n");
+void Terminal::initialize(void)
+{
+    terminal_row = 0;
+    terminal_column = 0;
+    terminal_color = vga_entry_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
+
+    clear();
 }
 
 Terminal* Terminal::s_terminal = 0;
@@ -67,14 +69,18 @@ void Terminal::putchar(char c)
         terminal_column = 0;
         if (terminal_row >= VGA_HEIGHT) {
             terminal_row = 0;
+            clear();
         }
         return;
+    }
+    if (terminal_row >= VGA_HEIGHT) {
+        terminal_row = 0;
+        clear();
     }
     putentryat(c, terminal_color, terminal_column, terminal_row);
     if (++terminal_column == VGA_WIDTH) {
         terminal_column = 0;
-        if (++terminal_row == VGA_HEIGHT)
-            terminal_row = 0;
+        terminal_row++;
     }
 }
 

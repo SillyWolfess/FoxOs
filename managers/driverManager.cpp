@@ -10,7 +10,6 @@ DriverManager::~DriverManager() {
 }
 void DriverManager::set() {
     _nDrivers = 0;
-    Terminal::s_terminal->writestring("Driver manager set\n");
 }
 void DriverManager::add(Driver* driver) {
     if (_nDrivers >= MAX_DRIVERS) {

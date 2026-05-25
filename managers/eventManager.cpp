@@ -11,7 +11,6 @@ EventManager::~EventManager() {
 void EventManager::set() {
     _nHandlers = 0;
     _nKeyHandler = 0;
-    Terminal::s_terminal->writestring("Event manager set\n");
 }
 void EventManager::add(EventHandler* handler) {
     if (_nHandlers >= MAX_EVENT_HANDLERS) {

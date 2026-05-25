@@ -49,8 +49,6 @@ extern "C"  void kernel_main(void)
 
 	/*activate interrupts*/
 	idt.activate();
-	terminal.writestring("Meow from the class\n");
-	terminal.writestring("Some other text\n");
 
 	while(1);
 }

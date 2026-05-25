@@ -119,28 +119,25 @@ void InterruptManager::loadIdt() {
 }
 
 void InterruptManager::set() {
+    Terminal::s_terminal->writestring("Interrupt manager ...");
     setHandlers();
     loadIdt();
     restartPICs();
-    Terminal::s_terminal->writestring("Interrupt manager set\n");
+    Terminal::s_terminal->writestring("OK\n");
 }
 
 void InterruptManager::activate() {
     if (activeManager != 0) {
         activeManager->deactivate();
     }
-    Terminal::s_terminal->writestring("Activating interrupt manager\n");
     activeManager = this;
     asm("sti");
-    Terminal::s_terminal->writestring("Interrupt manager active\n");
 }
 
 void InterruptManager::deactivate() {
     if (activeManager == this) {
-        Terminal::s_terminal->writestring("Deactivating interrupt manager\n");
         activeManager = 0;
         asm("cli");
-        Terminal::s_terminal->writestring("Interrupt manager inactive\n");
     }
 }
 

@@ -29,7 +29,7 @@ GlobalDescriptorTable::entry GlobalDescriptorTable::setEntry(
 
 
 void GlobalDescriptorTable::set() {
-    Terminal::s_terminal->writestring("Setting gdt\n");
+    Terminal::s_terminal->writestring("Gdt ...");
     _entries[0] = setEntry(0, 0, 0, 0); // null segment
     /**
      * 0xCF with _32BITS - set up 4Kb paging for memory
@@ -52,7 +52,7 @@ void GlobalDescriptorTable::set() {
 
     // asm volatile("lgdt %0": : "m" (_ptr) : "memory");
     asm volatile("lgdt %[_entries]": : [_entries] "m" (_ptr) );
-    Terminal::s_terminal->writestring("Gdt loaded\n");
+    Terminal::s_terminal->writestring("OK\n");
 }
 
 GlobalDescriptorTable::~GlobalDescriptorTable() {
