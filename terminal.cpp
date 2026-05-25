@@ -74,11 +74,21 @@ void Terminal::initialize(void)
 Terminal* Terminal::s_terminal = 0;
 
 void Terminal::writeHex8(uint8_t n) {
-    char *foo = "0x00";
     char *hex = "0123456789ABCDEF";
-    foo[2] = hex[(n >> 4) & 0x0F];
-    foo[3] = hex[n & 0x0F];
-    writestring(foo);
+    putchar('0'); putchar('x');
+    putchar(hex[(n >> 4) & 0x0F]);
+    putchar(hex[n & 0x0F]);
+
+}
+
+void Terminal::writeBin8(uint8_t n) {
+    for (int i = 0; i < 8; i++) {
+        if ((n >> (7 - i)) & 0x01) {
+            putchar('1');
+        } else {
+            putchar('0');
+        }
+    }
 }
 
 void Terminal::writeHex16(uint16_t n) {
@@ -99,23 +109,17 @@ void Terminal::putentryat(char c, uint8_t color, size_t x, size_t y)
 void Terminal::putchar(char c)
 {
     if (c == '\n') {
-        terminal_row++;
+        ++terminal_row;
         terminal_column = 0;
-        if (terminal_row >= VGA_HEIGHT) {
+        if (terminal_row > VGA_HEIGHT) {
             terminal_row = 0;
         //    clear();
         }
         return;
     }
-    /*
-     *    if (terminal_row >= VGA_HEIGHT) {
-        terminal_row = 0;
-     //   clear();
-    }*/
     putentryat(c, terminal_color, terminal_column, terminal_row);
     if (++terminal_column == VGA_WIDTH) {
         terminal_column = 0;
-        //terminal_row++;
         if (++terminal_row == VGA_HEIGHT)
             terminal_row = 0;
     }
