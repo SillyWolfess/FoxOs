@@ -35,14 +35,38 @@ void Terminal::initialize(void)
 
     clear();
     writestring("1234567890\nqwertyuiop\nasdfghjkl\nzxcvbnm\n");
-    writestring("0x01 = ");
-    writeHex8(0x01);
-    writestring("\n0x10 = ");
-    writeHex8(0x10);
-    writestring("\n0xA0 = ");
-    writeHex8(0xA0);
-    writestring("\n0xFF = ");
-    writeHex8(0xFF);
+    writestring("0x01 = "); writeHex8(0x01);
+    writestring(" 0x02 = "); writeHex8(0x02);
+    writestring(" 0x03 = "); writeHex8(0x03);
+    writestring(" 0x04 = "); writeHex8(0x04);
+    writestring(" 0x05 = "); writeHex8(0x05);
+    writestring(" 0x06 = "); writeHex8(0x06);
+    writestring(" 0x07 = "); writeHex8(0x07);
+    writestring(" 0x08 = "); writeHex8(0x08);
+    writestring(" 0x09 = "); writeHex8(0x09);
+    writestring(" 0x0A = "); writeHex8(0x0A);
+    writestring(" 0x0B = "); writeHex8(0x0B);
+    writestring(" 0x0C = "); writeHex8(0x0C);
+    writestring(" 0x0D = "); writeHex8(0x0D);
+    writestring(" 0x0E = "); writeHex8(0x0E);
+    writestring(" 0x0F = "); writeHex8(0x0F);
+    writestring("\n");
+
+    writestring("0x01 = "); writeHex8(0x10);
+    writestring(" 0x02 = "); writeHex8(0x20);
+    writestring(" 0x03 = "); writeHex8(0x);
+    writestring(" 0x04 = "); writeHex8(0x04);
+    writestring(" 0x05 = "); writeHex8(0x05);
+    writestring(" 0x06 = "); writeHex8(0x06);
+    writestring(" 0x07 = "); writeHex8(0x07);
+    writestring(" 0x08 = "); writeHex8(0x08);
+    writestring(" 0x09 = "); writeHex8(0x09);
+    writestring(" 0x0A = "); writeHex8(0x0A);
+    writestring(" 0x0B = "); writeHex8(0x0B);
+    writestring(" 0x0C = "); writeHex8(0x0C);
+    writestring(" 0x0D = "); writeHex8(0x0D);
+    writestring(" 0x0E = "); writeHex8(0x0E);
+    writestring(" 0x0F = "); writeHex8(0x0F);
     writestring("\n");
 }
 
