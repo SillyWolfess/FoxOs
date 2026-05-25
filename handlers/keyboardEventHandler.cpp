@@ -2,6 +2,18 @@
 #include <terminal.h>
 #include <macros/keyMacro.h>
 
+KeyboardEventHandler::KeyboardEventHandler() {
+    _logEvents = false;
+}
+
+KeyboardEventHandler::~KeyboardEventHandler() {
+
+}
+
+void KeyboardEventHandler::logEvents(bool value) {
+    _logEvents = value;
+}
+
 const char* KeyboardEventHandler::getKeyString(uint8_t key) {
  switch (key) {
     case KEY_0: return "0";
@@ -40,13 +52,21 @@ const char* KeyboardEventHandler::getKeyString(uint8_t key) {
     case KEY_Y: return "y";
     case KEY_Z: return "z";
     case KEY_X: return "x";
-    default: return "";
+    default: if (_logEvents) { Terminal::s_terminal->writeHex8(key); } return "";
     }
 }
 
 void KeyboardEventHandler::handle(KeyEvent event) {
     uint8_t key = event.getCode();
-    if (event.isUp()) {
+    if (_logEvents) {
+        if (event.isUp()) {
+            Terminal::s_terminal->writestring(" key_up ");
+        } else if (event.isDown()) {
+            Terminal::s_terminal->writestring(" key_down ");
+        }
+        Terminal::s_terminal->writestring(getKeyString(key));
+        Terminal::s_terminal->writestring(" ");
+    } else if (event.isUp()) {
         Terminal::s_terminal->writestring(getKeyString(key));
     }
 }

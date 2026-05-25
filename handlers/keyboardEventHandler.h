@@ -5,8 +5,13 @@
 #include <events/keyEvent.h>
 
 class KeyboardEventHandler : public EventHandler {
+    private:
+        bool _logEvents;
     public:
+        KeyboardEventHandler();
+        ~KeyboardEventHandler();
         void handle(KeyEvent);
+        void logEvents(bool);
         const char* getKeyString(uint8_t);
 };
 

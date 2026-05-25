@@ -34,10 +34,12 @@ extern "C"  void kernel_main(void)
 	eventManager.set();
 
 	KeyboardEventHandler keyboardEventHandler;
+	keyboardEventHandler.logEvents(true);
 	eventManager.addKeyHandler(&keyboardEventHandler);
 
 	DriverManager driverManager;
 	KeyboardDriver keyboard(&idt, &eventManager);
+	keyboard.setLog(true);
 
 	driverManager.set();
 	// register drivers

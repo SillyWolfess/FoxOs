@@ -11,15 +11,17 @@ class KeyboardDriver: public InterruptHandler, public Driver {
     Port8Bit _dataPort;
     Port8Bit _commandPort;
     EventManager* _evManager;
-    void log(uint8_t);
+    bool _logs;
 public:
     KeyboardDriver(InterruptManager* manager, EventManager* evManager);
     ~KeyboardDriver();
-    void set();
-    void activate() { set(); }
-    void printKey(const char* data);
-    void handleKey(uint8_t key, const char* data);
-    virtual uint32_t handle(uint32_t esp);
+    void activate();
+    /**
+     * handle keyboard interruption by reading data port and raising key event
+     * @param esp uint32_t
+     */
+    virtual uint32_t handle(uint32_t);
+    void setLog(bool v) { _logs = v;}
 };
 
 #endif
