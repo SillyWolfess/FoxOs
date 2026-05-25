@@ -47,6 +47,7 @@ extern "C"  void kernel_main(void)
 	// activate drivers
 	driverManager.activate();
 
+	terminal.enableCursor();
 	/*activate interrupts*/
 	idt.activate();
 

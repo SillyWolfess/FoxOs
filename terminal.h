@@ -1,9 +1,8 @@
 #ifndef _TERMINAL_H_
 #define _TERMINAL_H_
 
-#include <stdbool.h>
-#include <stddef.h>
-#include <stdint.h>
+#include <types.h>
+#include <hwcoms/port.h>
 
 class Terminal {
 private:
@@ -30,6 +29,10 @@ private:
         VGA_COLOR_WHITE = 15,
     };
 
+    Port8Bit _cursorPort1;
+    Port8Bit _cursorPort2;
+    bool _cursorEnabled;
+
     size_t terminal_row;
     size_t terminal_column;
     uint8_t terminal_color;
@@ -38,6 +41,8 @@ private:
     uint8_t vga_entry_color(enum vga_color fg, enum vga_color bg);
     uint16_t vga_entry(unsigned char uc, uint8_t color);
     size_t strlen(const char* str);
+    void outb();
+    void moveCursor(int x, int y);
 
 protected:
     void putentryat(char c, uint8_t color, size_t x, size_t y);
@@ -52,7 +57,10 @@ public:
     void writeBin8(uint8_t);
     void writeHex16(uint16_t);
     void clear();
+    void enableCursor();
 
+    Terminal();
+    ~Terminal();
     static Terminal* s_terminal;
 };
 #endif

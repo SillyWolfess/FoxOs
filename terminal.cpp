@@ -27,6 +27,7 @@ void Terminal::clear() {
     }
 }
 
+
 void Terminal::initialize(void)
 {
     terminal_row = 0;
@@ -78,7 +79,29 @@ void Terminal::writeHex8(uint8_t n) {
     putchar('0'); putchar('x');
     putchar(hex[(n >> 4) & 0x0F]);
     putchar(hex[n & 0x0F]);
+    moveCursor(terminal_column, terminal_row);
 
+}
+
+Terminal::Terminal()
+:_cursorPort1(0x3D4),
+_cursorPort2(0x3D5)
+{
+    _cursorEnabled = false;
+}
+
+Terminal::~Terminal() {}
+
+void Terminal::enableCursor() {
+    _cursorPort1.write(0x0A);
+    uint8_t cData = _cursorPort2.read() & 0xC0;
+    _cursorPort2.write(cData | (cData & 0x1F));
+
+    _cursorPort1.write(0x0B);
+    cData = _cursorPort2.read() & 0xE0;
+    _cursorPort2.write(cData | (cData & 0x1F));
+    _cursorEnabled = true;
+    moveCursor(terminal_column, terminal_row);
 }
 
 void Terminal::writeBin8(uint8_t n) {
@@ -89,6 +112,7 @@ void Terminal::writeBin8(uint8_t n) {
             putchar('0');
         }
     }
+    moveCursor(terminal_column, terminal_row);
 }
 
 void Terminal::writeHex16(uint16_t n) {
@@ -105,6 +129,20 @@ void Terminal::putentryat(char c, uint8_t color, size_t x, size_t y)
     const size_t index = y * VGA_WIDTH + x;
     terminal_buffer[index] = vga_entry(c, color);
 }
+
+void Terminal::moveCursor(int x, int y)
+{
+    if (!_cursorEnabled) {
+        return;
+    }
+    uint16_t pos = (y + 1) * VGA_WIDTH + x;
+
+    _cursorPort1.write(0x0F);
+    _cursorPort2.write((uint8_t) (pos & 0xFF));
+    _cursorPort1.write(0x0E);
+    _cursorPort2.write((uint8_t) ((pos >> 8) & 0xFF));
+}
+
 
 void Terminal::putchar(char c)
 {
@@ -137,4 +175,5 @@ void Terminal::write(const char* data, size_t size)
 void Terminal::writestring(const char* data)
 {
     write(data, strlen(data));
+    moveCursor(terminal_column, terminal_row);
 }
