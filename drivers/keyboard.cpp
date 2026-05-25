@@ -1,8 +1,8 @@
 #include <drivers/keyboard.h>
 #include <terminal.h>
-#include <eventManager.h>
-#include <keyMacro.h>
-#include <keyEvent.h>
+#include <managers/eventManager.h>
+#include <macros/keyMacro.h>
+#include <events/keyEvent.h>
 
 KeyboardDriver::KeyboardDriver(InterruptManager *manager, EventManager *evManager)
 :InterruptHandler(0x21, manager),

@@ -2,8 +2,8 @@
 #define _KEYBOARD_H
 
 #include <types.h>
-#include <idt.h>
-#include <port.h>
+#include <hwcoms/idt.h>
+#include <hwcoms/port.h>
 #include <drivers/driver.h>
 class EventManager;
 

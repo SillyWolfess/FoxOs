@@ -1,6 +1,6 @@
-#include "gdt.h"
-#include "terminal.h"
-#include "bitMacros.h"
+#include <gdt.h>
+#include <terminal.h>
+#include <macros/bitMacros.h>
 
 GlobalDescriptorTable::entry GlobalDescriptorTable::_entries[3];
 GlobalDescriptorTable::ptr GlobalDescriptorTable::_ptr;

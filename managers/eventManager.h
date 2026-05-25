@@ -2,6 +2,7 @@
 #define _EVENT_MANAGER_H
 
 #include <events/event.h>
+#include <events/keyEvent.h>
 
 class EventHandler;
 class KeyboardEventHandler;
