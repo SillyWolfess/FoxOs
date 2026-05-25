@@ -34,6 +34,16 @@ void Terminal::initialize(void)
     terminal_color = vga_entry_color(VGA_COLOR_LIGHT_GREY, VGA_COLOR_BLACK);
 
     clear();
+    writestring("1234567890\nqwertyuiop\nasdfghjkl\nzxcvbnm\n");
+    writestring("0x01 = ");
+    writeHex8(0x01);
+    writestring("\n0x10 = ");
+    writeHex8(0x10);
+    writestring("\n0xA0 = ");
+    writeHex8(0xA0);
+    writestring("\n0xFF = ");
+    writeHex8(0xFF);
+    writestring("\n");
 }
 
 Terminal* Terminal::s_terminal = 0;
@@ -41,9 +51,8 @@ Terminal* Terminal::s_terminal = 0;
 void Terminal::writeHex8(uint8_t n) {
     char *foo = "0x00";
     char *hex = "0123456789ABCDEF";
-    foo[0] = hex[(n >> 8) & 0x0f];
     foo[2] = hex[(n >> 4) & 0x0f];
-    foo[3] = hex[n &0x0f];
+    foo[3] = hex[n & 0x0f];
     writestring(foo);
 }
 
