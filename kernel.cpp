@@ -1,6 +1,7 @@
 #include <terminal.h>
 #include <gdt.h>
 #include <hwcoms/idt.h>
+#include <hwcoms/pci.h>
 // drivers
 #include <drivers/keyboard.h>
 // managers
@@ -44,6 +45,10 @@ extern "C"  void kernel_main(void)
 	driverManager.set();
 	// register drivers
 	driverManager.add(&keyboard);
+
+	PCIController pciController;
+	pciController.selectDrivers(&driverManager);
+
 	// activate drivers
 	driverManager.activate();
 
