@@ -54,6 +54,7 @@ public:
     void write(const char* data, size_t size);
     void writestring(const char* data);
     void writeHex8(uint8_t);
+    void writeHex8w0(uint8_t);
     void writeBin8(uint8_t);
     void writeHex16(uint16_t);
     void clear();

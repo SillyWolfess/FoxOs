@@ -80,6 +80,13 @@ void Terminal::writeHex8(uint8_t n) {
     putchar(hex[(n >> 4) & 0x0F]);
     putchar(hex[n & 0x0F]);
     moveCursor(terminal_column, terminal_row);
+}
+
+void Terminal::writeHex8w0(uint8_t n) {
+    char *hex = "0123456789ABCDEF";
+    putchar(hex[(n >> 4) & 0x0F]);
+    putchar(hex[n & 0x0F]);
+    moveCursor(terminal_column, terminal_row);
 
 }
 

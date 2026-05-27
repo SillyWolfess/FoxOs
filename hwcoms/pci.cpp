@@ -73,21 +73,21 @@ void PCIController::selectDrivers(DriverManager* manager) {
                     continue;
                 }
 
-                Terminal::s_terminal->writestring("PCI BUS");
-                Terminal::s_terminal->writeHex8(pci._bus & 0xFF);
+                Terminal::s_terminal->writestring("PCI BUS ");
+                Terminal::s_terminal->writeHex8w0(pci._bus & 0xFF);
 
-                Terminal::s_terminal->writestring(" ,DEVICE");
-                Terminal::s_terminal->writeHex8(pci._device & 0xFF);
+                Terminal::s_terminal->writestring(" ,DEVICE ");
+                Terminal::s_terminal->writeHex8w0(pci._device & 0xFF);
 
-                Terminal::s_terminal->writestring(" ,FUNCTION");
-                Terminal::s_terminal->writeHex8(pci._function & 0xFF);
+                Terminal::s_terminal->writestring(" ,FUNCTION ");
+                Terminal::s_terminal->writeHex8w0(pci._function & 0xFF);
 
-                Terminal::s_terminal->writestring(" ,VENDOR ID");
-                Terminal::s_terminal->writeHex8((pci._vendorId & 0xFF00) >> 8);
-                Terminal::s_terminal->writeHex8(pci._vendorId & 0xFF);
-                Terminal::s_terminal->writestring(" ,DEVICE ID");
-                Terminal::s_terminal->writeHex8((pci._deviceId & 0xFF00) >> 8);
-                Terminal::s_terminal->writeHex8(pci._deviceId & 0xFF);
+                Terminal::s_terminal->writestring(" ,VENDOR ID ");
+                Terminal::s_terminal->writeHex8w0((pci._vendorId & 0xFF00) >> 8);
+                Terminal::s_terminal->writeHex8w0(pci._vendorId & 0xFF);
+                Terminal::s_terminal->writestring(" ,DEVICE ID ");
+                Terminal::s_terminal->writeHex8w0((pci._deviceId & 0xFF00) >> 8);
+                Terminal::s_terminal->writeHex8w0(pci._deviceId & 0xFF);
                 Terminal::s_terminal->writestring("\n");
             }
         }
