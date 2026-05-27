@@ -6,6 +6,19 @@
 #include <hwcoms/idt.h>
 
 class DriverManager;
+class InterruptManager;
+enum class BASE_ADDRESS_REGISTER_TYPE {
+        MEMORY_MAPPING = 0,
+        INPUT_OUTPUT = 1
+};
+
+struct BaseAddressRegister {
+    public:
+        bool _prefechable; // used only in memory mapping
+        uint8_t* _address;
+        uint32_t _size;
+        BASE_ADDRESS_REGISTER_TYPE _type; 
+};
 
 struct PCIDescriptor {
     public:
@@ -46,7 +59,15 @@ class PCIController {
         void write(uint8_t bus, uint16_t device, uint16_t function, uint32_t registerOffset, uint32_t value);
         bool hasFunctions(uint16_t bus, uint16_t device);
 
-        void selectDrivers(DriverManager* manager);
+        void selectDrivers(DriverManager* manager, InterruptManager* interruptManager);
+        /**
+         * @param bus bus number
+         * @param device device number
+         * @param function function number
+         * @param barNumber number of base address register
+         */
+        BaseAddressRegister getBaseAddressRegister(uint8_t bus, uint16_t device, uint16_t function, uint16_t barNumber);
+        Driver* getDriver(PCIDescriptor pci, InterruptManager* manager);
 };
 
 #endif

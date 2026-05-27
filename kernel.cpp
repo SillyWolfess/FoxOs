@@ -47,7 +47,7 @@ extern "C"  void kernel_main(void)
 	driverManager.add(&keyboard);
 
 	PCIController pciController;
-	pciController.selectDrivers(&driverManager);
+	pciController.selectDrivers(&driverManager, &idt);
 
 	// activate drivers
 	driverManager.activate();

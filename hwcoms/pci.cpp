@@ -1,6 +1,7 @@
 #include <hwcoms/pci.h>
 #include <drivers/driver.h>
 #include <managers/driverManager.h>
+#include <hwcoms/idt.h>
 
 #include <terminal.h>
 
@@ -62,7 +63,7 @@ PCIDescriptor PCIController::getDescriptor(uint8_t bus, uint16_t device, uint16_
     return result;
 }
 
-void PCIController::selectDrivers(DriverManager* manager) {
+void PCIController::selectDrivers(DriverManager* manager, InterruptManager* interruptManager) {
     for (int bus = 0; bus < 8; bus++) {
         for (int device = 0; device < 32; device++) {
             int nFunction = hasFunctions(bus, device) ? 8 : 1;
@@ -71,6 +72,18 @@ void PCIController::selectDrivers(DriverManager* manager) {
 
                 if (pci._vendorId == 0x0000 || pci._vendorId == 0xFFFF) {
                     continue;
+                }
+
+                for (int barNum = 0; barNum < 6; barNum++) {
+                    BaseAddressRegister bar = getBaseAddressRegister(bus, device, function, barNum);
+                    if (bar._address && (bar._type == BASE_ADDRESS_REGISTER_TYPE::INPUT_OUTPUT)) {
+                        pci._portBase = (uint32_t) bar._address;
+
+                        Driver* driver = getDriver(pci, interruptManager);
+                        if (driver != 0) {
+                            manager->add(driver);
+                        }
+                    }
                 }
 
                 Terminal::s_terminal->writestring("PCI BUS ");
@@ -92,4 +105,58 @@ void PCIController::selectDrivers(DriverManager* manager) {
             }
         }
     }
+}
+
+BaseAddressRegister PCIController::getBaseAddressRegister(uint8_t bus, uint16_t device, uint16_t function, uint16_t barNumber) {
+    BaseAddressRegister result;
+
+    uint32_t headerType = read(bus, device, function, 0x0E) & 0x7F;
+    int maxBARS = 6 - (4 * headerType);
+    if (barNumber >= maxBARS) {
+        return result;
+    }
+
+    uint32_t value = read(bus, device, function, 0x10 + (4 * barNumber));
+    result._type = (value & 0x1) ? BASE_ADDRESS_REGISTER_TYPE::INPUT_OUTPUT : BASE_ADDRESS_REGISTER_TYPE::MEMORY_MAPPING;
+    
+    uint32_t tmp;
+
+    if (result._type == BASE_ADDRESS_REGISTER_TYPE::MEMORY_MAPPING) {
+        result._prefechable = ((value >> 3) & 0x01) == 0x01;
+        //TODO lowlevel.eu pci
+        switch ((value >> 1) & 0x3) {
+            case 0: break;// 32 bit mode
+            case 1: break;// 20 bit mode
+            case 2: break;// 64 bit mode
+            default: break;
+        }
+    } else if (result._type == BASE_ADDRESS_REGISTER_TYPE::INPUT_OUTPUT) {
+        result._address  = (uint8_t*) (value & ~0x3);
+        result._prefechable = false;
+    }
+
+    return result;
+}
+
+Driver* PCIController::getDriver(PCIDescriptor pci, InterruptManager* manager) {
+    /*
+    switch (pci._vendorId) {
+        case 0x8086: { // intel
+            switch (pci._deviceId) {
+                
+            }
+        } break;
+        
+    }
+
+    switch (pci._classId) {
+        case 0x03: // graphics
+            switch (pci._subclassId) {
+                case 0x00: // vga
+                break;
+            }
+        break; 
+    }
+    */
+    return 0;
 }
