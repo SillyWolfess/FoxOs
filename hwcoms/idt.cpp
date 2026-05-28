@@ -1,6 +1,8 @@
 #include <hwcoms/idt.h>
 #include <terminal.h>
+#include <gdt.h>
 #include <macros/bitMacros.h>
+#include <managers/taskManager.h>
 
 InterruptManager::idtEntry InterruptManager::idt[256];
 InterruptManager::Idtp InterruptManager::_idtp;
@@ -42,6 +44,11 @@ uint32_t InterruptManager::doHandle(uint8_t number, uint32_t esp) {
     } else if (number != _IDT_TIMER) {
         log(number);
     }
+
+    if (number == _IDT_TIMER) {
+        esp = (uint32_t) _taskManager->schedule((CPUState*)esp);
+    }
+
     if (0x20 <= number && number < 0x30) {
         picMasterCommand.write(0x20);
         if (0x28 <= number) {
@@ -69,12 +76,14 @@ void InterruptManager::SetIdtEntries(
     
 }
 
-InterruptManager::InterruptManager(GlobalDescriptorTable *gdt)
+InterruptManager::InterruptManager(GlobalDescriptorTable *gdt, TaskManager *tm)
 :picMasterCommand(0x20),
  picMasterData(0x21),
  picSlaveCommand(0xA0),
  picSlaveData(0xA1)
 {
+    _gdt = gdt;
+    _taskManager = tm;
 };
 
 void InterruptManager::restartPICs() {
@@ -99,7 +108,7 @@ void InterruptManager::restartPICs() {
 }
 
 void InterruptManager::setHandlers() {
-    const uint16_t CodeSegment = 0x08;
+    const uint16_t CodeSegment = _gdt->getCodeSegment();
     const uint8_t IDT_INTERRUPT_GATE = 0x8E;
     for (uint16_t i = 0; i < 256; i++) {
         _handlers[i] = 0;

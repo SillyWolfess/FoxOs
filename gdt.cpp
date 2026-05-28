@@ -10,6 +10,10 @@ GlobalDescriptorTable::GlobalDescriptorTable()
     Terminal::s_terminal->writestring("gdt()\n");
 }
 
+uint16_t GlobalDescriptorTable::getCodeSegment() {
+    return 0x08;
+}
+
 GlobalDescriptorTable::entry GlobalDescriptorTable::setEntry(
     uint32_t base, uint32_t limit,
     uint8_t access, uint8_t flags

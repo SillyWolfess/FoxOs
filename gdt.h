@@ -33,6 +33,7 @@ public:
     GlobalDescriptorTable();
     ~GlobalDescriptorTable();
     void set();
+    uint16_t getCodeSegment();
 };
 
 #endif

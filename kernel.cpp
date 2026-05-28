@@ -7,6 +7,7 @@
 // managers
 #include <managers/driverManager.h>
 #include <managers/eventManager.h>
+#include <managers/taskManager.h>
 // handlers
 #include <handlers/keyboardEventHandler.h>
 
@@ -28,7 +29,9 @@ extern "C"  void kernel_main(void)
 	GlobalDescriptorTable gdt;
 	gdt.set();
 
-	InterruptManager idt(&gdt);
+	TaskManager taskManager;
+
+	InterruptManager idt(&gdt, &taskManager);
 	idt.set();
 	/*init other drivers*/
 	EventManager eventManager;

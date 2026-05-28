@@ -2,11 +2,12 @@
 #define _INTERRUPT_MANAGER_H
 #include <types.h>
 #include <hwcoms/port.h>
-#include <gdt.h>
 
 #define _IDT_TIMER 0x20
 
 class InterruptManager;
+class GlobalDescriptorTable;
+class TaskManager;
 
 class InterruptHandler {
 protected:
@@ -32,6 +33,8 @@ class InterruptManager {
 protected:
     static InterruptManager* activeManager;
     InterruptHandler* _handlers[256];
+    TaskManager* _taskManager;
+    GlobalDescriptorTable* _gdt;
 
     struct idtEntry{
         uint16_t baseLow;
@@ -78,7 +81,7 @@ protected:
 
 public:
 
-    InterruptManager(GlobalDescriptorTable *gdt);
+    InterruptManager(GlobalDescriptorTable *gdt, TaskManager* tn);
     ~InterruptManager();
 
     void activate();
